@@ -1,3 +1,4 @@
+// Запуск при загрузке страницы
 document.addEventListener("DOMContentLoaded", () => {
   // Получаем коллекцию всех выпадающих списков
   const accordions = document.querySelectorAll(".accordion");
@@ -15,14 +16,13 @@ document.addEventListener("DOMContentLoaded", () => {
       // меняем состояние текущего списка на противоположное
       self.classList.toggle("open");
 
+      // если список в состоянии "развернут", добавляем аттрибуты для отображения
       if (self.classList.contains("open")) {
-        control.setAttribute("aria-expanded", true);
-        content.setAttribute("aria-hidden", false);
-        content.style.maxHeight = content.scrollHeight + "px";
-      } else {
-        control.setAttribute("aria-expanded", false);
-        content.setAttribute("aria-hidden", true);
-        content.style.maxHeight = null;
+        open(control, content);
+      } 
+      // если список в состоянии "свернут", добавляем аттрибуты для скрытия 
+      else {
+        close(control, content);
       }
     });
   });
@@ -36,10 +36,22 @@ function hideLists(accordions, self) {
     if (accordion !== self) {
       setTimeout(() => {
         accordion.classList.remove("open");
-        control.setAttribute("aria-expanded", false);
-        content.setAttribute("aria-hidden", true);
-        content.style.maxHeight = null;
+        close(control, content);
       }, 500);
     }
   });
+}
+
+// Функция разворачивания выпадающего списка
+function open(control, content) {
+  control.setAttribute("aria-expanded", true);
+  content.setAttribute("aria-hidden", false);
+  content.style.maxHeight = content.scrollHeight + "px";
+}
+
+// Функция свертывания выпадающего списка
+function close(control, content) {
+  control.setAttribute("aria-expanded", false);
+  content.setAttribute("aria-hidden", true);
+  content.style.maxHeight = null;
 }
